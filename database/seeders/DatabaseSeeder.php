@@ -20,12 +20,9 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'Hani Elnagdy',
-            'email' => '01226238306',
+            'email' => 'hani@admin.com',
             'password' => Hash::make('hani2976'),
         ]);
 
-        $this->call([
-            ClientSeeder::class,
-        ]);
     }
 }
