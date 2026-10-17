@@ -1,2 +1,3 @@
 *.sqlite*
 /seeders/DatabaseSeeder
+.env.example
