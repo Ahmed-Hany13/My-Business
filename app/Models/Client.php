@@ -15,7 +15,6 @@ class Client extends Model
         "balance",
         "debt",
         "start_date",
-        "end_date",
         "notes"
     ];
 

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Livewire\Component;
 use App\Models\Client;
@@ -17,6 +17,9 @@ new class extends Component {
     #[Url(as: 'filter_end_date', except: null)]
     public ?string $endDate = null;
 
+    #[Url(as: 'unpaid_month', except: null)]
+    public ?string $unpaidMonth = null;
+
     public function updatedStartDate(): void
     {
         $this->resetPage();
@@ -32,9 +35,14 @@ new class extends Component {
         $this->resetPage();
     }
 
+    public function updatedUnpaidMonth(): void
+    {
+        $this->resetPage();
+    }
+
     public function clearFilters(): void
     {
-        $this->reset(['search', 'startDate', 'endDate']);
+        $this->reset(['search', 'startDate', 'endDate', 'unpaidMonth']);
         $this->resetPage();
     }
 
@@ -48,10 +56,19 @@ new class extends Component {
                     $query->where('name', 'like', "%{$search}%");
                 })
                 ->when($this->startDate, function ($query, $startDate) {
-                    $query->where('end_date', '>=', $startDate);
+                    $query->where('start_date', '>=', $startDate);
                 })
                 ->when($this->endDate, function ($query, $endDate) {
-                    $query->where('start_date', '<=', $endDate);
+                    $query->where('end_date', '<=', $endDate);
+                })
+                ->when($this->unpaidMonth, function ($query) {
+                    $date = \Carbon\Carbon::createFromFormat('Y-m', $this->unpaidMonth);
+                    $query->where('start_date', '<=', $date->copy()->endOfMonth())
+                          ->where('end_date', '>=', $date->copy()->startOfMonth())
+                          ->whereDoesntHave('invoices', function ($q) use ($date) {
+                              $q->whereMonth('created_at', $date->month)
+                                ->whereYear('created_at', $date->year);
+                          });
                 })
                 ->latest()
                 ->paginate(5),
@@ -73,7 +90,7 @@ new class extends Component {
                 جاري البحث...
             </span>
         </div>
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div>
                 <label for="filter_start_date" class="mb-1 block text-xs font-medium text-slate-400">بداية فترة البحث</label>
                 <input id="filter_start_date" type="date" wire:model.live.debounce.300ms="startDate"
@@ -84,8 +101,18 @@ new class extends Component {
                 <input id="filter_end_date" type="date" wire:model.live.debounce.300ms="endDate"
                     class="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-4 py-3 text-base text-slate-300 focus:border-blue-500 focus:ring-blue-500" />
             </div>
+            <div>
+                <label for="unpaid_month" class="mb-1 block text-xs font-medium text-amber-400">
+                    <svg class="w-3.5 h-3.5 inline-block ml-0.5 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    المتأخرين عن الدفع
+                </label>
+                <input id="unpaid_month" type="month" wire:model.live.debounce.300ms="unpaidMonth"
+                    class="w-full rounded-lg border border-amber-600/50 bg-slate-900/80 px-4 py-3 text-base text-slate-300 focus:border-amber-500 focus:ring-amber-500" />
+            </div>
         </div>
-        @if ($search !== '' || $startDate || $endDate)
+        @if ($search !== '' || $startDate || $endDate || $unpaidMonth)
             <button type="button" wire:click="clearFilters"
                 class="text-sm font-medium text-blue-400 transition hover:text-blue-300">
                 مسح البحث والتصفية
@@ -182,8 +209,6 @@ new class extends Component {
                             <div class="flex flex-col gap-0.5 font-mono text-[11px]">
                                 <span class="text-slate-300">من:
                                     {{ \Carbon\Carbon::parse($client->start_date)->format('Y/m/d') }}</span>
-                                <span class="{{ $isExpired ? 'text-rose-400 font-semibold' : 'text-slate-400' }}">إلى:
-                                    {{ \Carbon\Carbon::parse($client->end_date)->format('Y/m/d') }}</span>
                             </div>
                         </td>
 
@@ -256,7 +281,7 @@ new class extends Component {
                                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
                             </div>
-                            @if ($search !== '' || $startDate || $endDate)
+                            @if ($search !== '' || $startDate || $endDate || $unpaidMonth)
                                 <p class="text-base font-semibold text-slate-300">لا توجد نتائج مطابقة لمعايير البحث والتصفية.</p>
                                 <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">عدّل معايير البحث أو امسح
                                     التصفية لعرض جميع العملاء.</p>

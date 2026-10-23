@@ -28,8 +28,7 @@ class StoreClientRequest extends FormRequest
             "balance" => ['nullable', 'numeric'],
             "debt" => ['nullable', 'numeric'],
             "notes" => ['nullable', 'string'],
-            "start_date" => ['required', 'date', 'before:end_date'],
-            "end_date" => ['required', 'date' , 'after:start_date'],
+            "start_date" => ['required', 'date'],
         ];
     }
 
@@ -46,7 +45,6 @@ class StoreClientRequest extends FormRequest
             'balance' => 'الرصيد',
             'debt' => 'المديونية',
             'start_date' => 'تاريخ البدء',
-            'end_date' => 'تاريخ الانتهاء',
             'product' => 'المنتج',
             'notes' => 'الملاحظات',
         ];
@@ -70,10 +68,6 @@ class StoreClientRequest extends FormRequest
             'debt.numeric' => 'يجب أن تكون المديونية قيمة عددية.',
             'start_date.required' => 'حقل تاريخ البدء مطلوب.',
             'start_date.date' => 'يرجى إدخال تاريخ بدء صالح.',
-            'end_date.required' => 'حقل تاريخ الانتهاء مطلوب.',
-            'end_date.date' => 'يرجى إدخال تاريخ انتهاء صالح.',
-            'start_date.before' => 'تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء.',
-            'end_date.after' => 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء.',
         ];
     }
 }

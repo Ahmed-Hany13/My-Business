@@ -20,7 +20,6 @@ return new class extends Migration
             $table->decimal('balance',8,2)->nullable();
             $table->decimal('debt',8,2)->nullable();
             $table->date('start_date');
-            $table->date('end_date');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

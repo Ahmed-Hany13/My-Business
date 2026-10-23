@@ -37,7 +37,6 @@ class UpdateClientRequest extends FormRequest
             "debt" => ['nullable', 'numeric'],
             "monthly_payment" => ['nullable', 'numeric'],
             "start_date" => ['required', 'date'],
-            "end_date" => ['required', 'date'],
         ];
     }
     public function messages()
@@ -51,8 +50,6 @@ class UpdateClientRequest extends FormRequest
             'debt.numeric' => 'يجب أن تكون المديونية قيمة عددية.',
             'start_date.required' => 'حقل تاريخ البدء مطلوب.',
             'start_date.date' => 'يرجى إدخال تاريخ بدء صالح.',
-            'end_date.required' => 'حقل تاريخ الانتهاء مطلوب.',
-            'end_date.date' => 'يرجى إدخال تاريخ انتهاء صالح.',
         ];
     }
 }

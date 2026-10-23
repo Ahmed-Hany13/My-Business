@@ -38,7 +38,7 @@
 
     <!-- 1. Add Client Modal -->
     <div id="addClientModal"
-        class="{{ $errors->hasAny(['name', 'product', 'balance', 'debt', 'monthly_payment', 'start_date', 'end_date', 'notes']) && !session('is_edit') ? '' : 'hidden' }} fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto p-3 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        class="{{ $errors->hasAny(['name', 'product', 'balance', 'debt', 'monthly_payment', 'start_date', 'notes']) && !session('is_edit') ? '' : 'hidden' }} fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto p-3 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-xl overflow-y-auto rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-4 sm:p-6 text-slate-200">
             <div class="flex items-center justify-between mb-5 border-b border-slate-800/80 pb-3">
                 <div class="flex items-center gap-2.5">
@@ -113,10 +113,6 @@
                             <p class="text-xs text-rose-400 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                </div>
-
-                {{-- Start Date & End Date in 2 columns --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1.5">تاريخ البدء <span
                                 class="text-rose-500">*</span></label>
@@ -126,16 +122,10 @@
                             <p class="text-xs text-rose-400 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                </div>
 
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">تاريخ الانتهاء <span
-                                class="text-rose-500">*</span></label>
-                        <input type="date" name="end_date" value="{{ old('end_date') }}"
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border {{ $errors->has('end_date') ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-700' }} text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
-                        @error('end_date')
-                            <p class="text-xs text-rose-400 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                {{-- Start Date & End Date in 2 columns --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1.5">ملاحظات</label>
@@ -277,24 +267,17 @@
                         <input type="number" step="0.01" name="monthly_payment" id="edit_monthly_payment"
                             class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all font-mono">
                     </div>
-                </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1.5">تاريخ البدء <span
+                                    class="text-rose-500">*</span></label>
+                            <input type="date" name="start_date" id="edit_start_date"
+                                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
+                        </div>
 
-                {{-- Start Date & End Date in 2 columns --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">تاريخ البدء <span
-                                class="text-rose-500">*</span></label>
-                        <input type="date" name="start_date" id="edit_start_date"
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">تاريخ الانتهاء <span
-                                class="text-rose-500">*</span></label>
-                        <input type="date" name="end_date" id="edit_end_date"
-                            class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
                     </div>
                 </div>
+
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">ملاحظات</label>
                     <textarea name="notes" id="edit_notes" rows="3"
@@ -331,7 +314,6 @@
             document.getElementById('edit_monthly_payment').value = client.monthly_payment || '0.00';
             document.getElementById('edit_notes').value = client.notes || '';
             document.getElementById('edit_start_date').value = client.start_date || '';
-            document.getElementById('edit_end_date').value = client.end_date || '';
             toggleModal('editClientModal');
         }
 
