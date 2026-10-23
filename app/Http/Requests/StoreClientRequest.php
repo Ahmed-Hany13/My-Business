@@ -29,6 +29,7 @@ class StoreClientRequest extends FormRequest
             "debt" => ['nullable', 'numeric'],
             "notes" => ['nullable', 'string'],
             "start_date" => ['required', 'date'],
+            "end_date" => ['nullable' , 'date']
         ];
     }
 

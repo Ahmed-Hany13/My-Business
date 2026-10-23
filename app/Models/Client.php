@@ -15,7 +15,8 @@ class Client extends Model
         "balance",
         "debt",
         "start_date",
-        "notes"
+        "end_date",
+        "notes",
     ];
 
     public function invoices()
