@@ -59,12 +59,18 @@ new class extends Component {
                     $query->where('start_date', '>=', $startDate);
                 })
                 ->when($this->endDate, function ($query, $endDate) {
-                    $query->where('end_date', '<=', $endDate);
+                    $query->where(function ($q) use ($endDate) {
+                        $q->whereNull('end_date')
+                          ->orWhere('end_date', '<=', $endDate);
+                    });
                 })
                 ->when($this->unpaidMonth, function ($query) {
                     $date = \Carbon\Carbon::createFromFormat('Y-m', $this->unpaidMonth);
                     $query->where('start_date', '<=', $date->copy()->endOfMonth())
-                          ->where('end_date', '>=', $date->copy()->startOfMonth())
+                          ->where(function ($q) use ($date) {
+                              $q->whereNull('end_date')
+                                ->orWhere('end_date', '>=', $date->copy()->startOfMonth());
+                          })
                           ->whereDoesntHave('invoices', function ($q) use ($date) {
                               $q->whereMonth('created_at', $date->month)
                                 ->whereYear('created_at', $date->year);
