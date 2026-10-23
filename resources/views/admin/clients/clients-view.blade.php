@@ -38,7 +38,7 @@
 
     <!-- 1. Add Client Modal -->
     <div id="addClientModal"
-        class="{{ $errors->hasAny(['name', 'product', 'balance', 'debt', 'monthly_payment', 'start_date', 'notes']) && !session('is_edit') ? '' : 'hidden' }} fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto p-3 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        class="{{ $errors->hasAny(['name', 'product', 'balance', 'debt', 'monthly_payment', 'start_date', 'end_date', 'notes']) && !session('is_edit') ? '' : 'hidden' }} fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto p-3 sm:p-4 bg-black/80 backdrop-blur-sm transition-opacity">
         <div class="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-xl overflow-y-auto rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-4 sm:p-6 text-slate-200">
             <div class="flex items-center justify-between mb-5 border-b border-slate-800/80 pb-3">
                 <div class="flex items-center gap-2.5">
